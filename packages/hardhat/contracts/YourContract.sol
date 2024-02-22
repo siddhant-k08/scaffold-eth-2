@@ -7,6 +7,8 @@ import "hardhat/console.sol";
 // Use openzeppelin to inherit battle-tested implementations (ERC20, ERC721, etc)
 // import "@openzeppelin/contracts/access/Ownable.sol";
 
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
 /**
  * A smart contract that allows changing a state variable of the contract and tracking the changes
  * It also allows the owner to withdraw the Ether in the contract
