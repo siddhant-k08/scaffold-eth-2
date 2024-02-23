@@ -2,8 +2,10 @@ import { BigInt, Address } from "@graphprotocol/graph-ts";
 import {
   YourContract,
   GreetingChange,
+  TokenInit as TokenInitEvent,
+  Transfer as TransferEvent,
 } from "../generated/YourContract/YourContract";
-import { Greeting, Sender } from "../generated/schema";
+import { Greeting, Sender, TokenInit, Transfer } from "../generated/schema";
 
 export function handleGreetingChange(event: GreetingChange): void {
   let senderString = event.params.greetingSetter.toHexString();
@@ -32,4 +34,18 @@ export function handleGreetingChange(event: GreetingChange): void {
 
   greeting.save();
   sender.save();
+}
+
+export function handleTokenInit(event: TokenInitEvent): void {
+  let entity = new TokenInit(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.to = event.params.to
+  entity.amount = event.params.amount
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
 }

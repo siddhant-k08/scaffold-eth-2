@@ -15,3 +15,22 @@ type Sender @entity {
   createdAt: BigInt!
   greetingCount: BigInt!
 }
+
+type TokenInit @entity {
+  id: Bytes!
+  to: Bytes! # address
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Transfer @entity{
+  id: Bytes!
+  from: Bytes! # address
+  to: Bytes! # address
+  value: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}

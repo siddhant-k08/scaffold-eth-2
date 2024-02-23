@@ -3,21 +3,20 @@
 import { gql, useQuery } from "@apollo/client";
 import { Address } from "~~/components/scaffold-eth";
 
-const GreetingsTable = () => {
-  const GREETINGS_GRAPHQL = `
-  query MyQuery {
-    greetingChanges(orderBy: blockTimestamp, orderDirection: asc, first: 5) {
+const MintersTable = () => {
+const GET_TOKENINITS = gql`
+query MyQuery {
+    tokenInits(orderBy: id, orderDirection: asc) {
       id
-      newGreeting
-      value
-      greetingSetter
-      premium
+      to
+      amount
     }
   }
 `;
 
-  const GREETINGS_GQL = gql(GREETINGS_GRAPHQL);
-  const { data: greetingsData, error } = useQuery(GREETINGS_GQL, { fetchPolicy: "network-only" });
+const { loading, error, data: tokenInitsData } = useQuery(GET_TOKENINITS);
+
+const tokenInits = tokenInitsData?.tokenInits || [];
 
   // Subgraph maybe not yet configured
   if (error) {
@@ -31,19 +30,19 @@ const GreetingsTable = () => {
           <thead>
             <tr className="rounded-xl">
               <th className="bg-primary"></th>
-              <th className="bg-primary">Sender</th>
-              <th className="bg-primary">Greetings</th>
+              <th className="bg-primary">Minters</th>
+              <th className="bg-primary">Amount</th>
             </tr>
           </thead>
           <tbody>
-            {greetingsData?.greetingChanges?.map((greeting: any, index: number) => {
+            {tokenInitsData?.tokenInits?.map((tokenInit: any, index: number) => {
               return (
-                <tr key={greeting.id}>
+                <tr key={tokenInit.id}>
                   <th>{index + 1}</th>
                   <td>
-                    <Address address={greeting?.greetingSetter} />
+                    <Address address={tokenInit.to} />
                   </td>
-                  <td>{greeting.newGreeting}</td>
+                  <td>{tokenInit.amount}</td>
                 </tr>
               );
             })}
@@ -54,4 +53,4 @@ const GreetingsTable = () => {
   );
 };
 
-export default GreetingsTable;
+export default MintersTable;

@@ -6,7 +6,6 @@ import "hardhat/console.sol";
 
 // Use openzeppelin to inherit battle-tested implementations (ERC20, ERC721, etc)
 // import "@openzeppelin/contracts/access/Ownable.sol";
-
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 /**
@@ -14,7 +13,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
  * It also allows the owner to withdraw the Ether in the contract
  * @author BuidlGuidl
  */
-contract YourContract {
+contract YourContract is ERC20{
 	// State Variables
 	address public immutable owner;
 	string public greeting = "Building Unstoppable Apps!!!";
@@ -32,7 +31,7 @@ contract YourContract {
 
 	// Constructor: Called once on contract deployment
 	// Check packages/hardhat/deploy/00_deploy_your_contract.ts
-	constructor(address _owner) {
+	constructor(address _owner) ERC20("Token","TKN"){
 		owner = _owner;
 	}
 
@@ -43,6 +42,16 @@ contract YourContract {
 		require(msg.sender == owner, "Not the Owner");
 		_;
 	}
+
+	// Event to emit address of minter and amount of tokens minted
+    event TokenInit(address to, uint256 amount);
+
+	// Function to mint tokens
+    function mint(address to, uint256 amount) public{
+        _mint(to, amount);
+
+        emit TokenInit(to, amount);
+    }
 
 	/**
 	 * Function that allows anyone to change the state variable "greeting" of the contract and increase the counters
